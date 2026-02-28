@@ -175,6 +175,29 @@ li + li {
   max-height: 560px;
 }
 
+.first-config ol {
+  margin-bottom: 12px;
+}
+
+.video-placeholder {
+  border: 1px dashed #9bb8dd;
+  background: #f4f8ff;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #27466a;
+}
+
+.video-placeholder strong {
+  font-size: 14px;
+}
+
+.video-placeholder span {
+  font-size: 13px;
+}
+
 details {
   border: 1px solid var(--line);
   border-radius: 12px;
