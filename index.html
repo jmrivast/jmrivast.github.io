@@ -49,8 +49,9 @@
         </p>
         <div class="cta-row">
           <a
+            id="btn-download"
             class="btn btn-primary"
-            href="https://github.com/jmrivast/RBP-Rivas-Budget-Planning/releases/download/v2.0.2/RBP_Setup_2.0.2.exe"
+            href="https://github.com/jmrivast/RBP-Rivas-Budget-Planning/releases/download/v2.0.3/RBP_Setup_2.0.3.exe"
             >Descargar para Windows</a
           >
           <a
@@ -61,7 +62,7 @@
             >Cambios y versiones</a
           >
         </div>
-        <p class="meta">Versión actual: 2.0.2 · Compatible con Windows 10/11</p>
+        <p class="meta" id="meta-version">Versión actual: 2.0.3 · Compatible con Windows 10/11</p>
       </section>
 
       <section class="grid">
@@ -78,7 +79,7 @@
         <article class="card">
           <h2>Instalación rápida</h2>
           <ol>
-            <li>Descarga el archivo `RBP_Setup_2.0.2.exe`</li>
+            <li>Descarga el archivo <code id="filename-hint">RBP_Setup_2.0.3.exe</code></li>
             <li>
               Ejecuta el instalador. Si aparece SmartScreen, pulsa
               <strong>Más información</strong> y luego
@@ -176,6 +177,39 @@
         </div>
       </section>
     </main>
+
+    <script>
+      // Auto-detect latest GitHub release and update the download button.
+      // Falls back silently to the hardcoded v2.0.3 link if the API is unavailable.
+      (function () {
+        const REPO = 'jmrivast/RBP-Rivas-Budget-Planning';
+        const API  = `https://api.github.com/repos/${REPO}/releases/latest`;
+
+        fetch(API, { headers: { Accept: 'application/vnd.github+json' } })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+          .then(function (data) {
+            // Find the .exe asset
+            var asset = (data.assets || []).find(function (a) {
+              return a.name.endsWith('.exe');
+            });
+            if (!asset) return;
+
+            var tag     = data.tag_name;                     // e.g. "v2.0.3"
+            var version = tag.replace(/^v/, '');             // e.g. "2.0.3"
+            var dlUrl   = asset.browser_download_url;
+            var fname   = asset.name;
+
+            var btnEl  = document.getElementById('btn-download');
+            var metaEl = document.getElementById('meta-version');
+            var fnEl   = document.getElementById('filename-hint');
+
+            if (btnEl)  btnEl.href = dlUrl;
+            if (metaEl) metaEl.textContent = 'Versi\u00f3n actual: ' + version + ' \u00b7 Compatible con Windows 10/11';
+            if (fnEl)   fnEl.textContent = fname;
+          })
+          .catch(function () { /* silently use hardcoded fallback */ });
+      })();
+    </script>
   </body>
 </html>
 
